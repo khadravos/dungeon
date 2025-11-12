@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://cuptdqrmxph1d"]
+
+[ext_resource type="Script" path="res://scenes/dungeon.gd" id="1_25qpe"]
+[ext_resource type="PackedScene" uid="uid://bjl8gr780i43i" path="res://scenes/debuggrid.tscn" id="2_4hiai"]
+[ext_resource type="Texture2D" uid="uid://cbmssdr7hejib" path="res://sprites/New Piskel.png" id="2_iq7sp"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2n48x"]
+lightmap_size_hint = Vector2i(12, 12)
+center_offset = Vector3(0, -1, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_asiav"]
+albedo_texture = ExtResource("2_iq7sp")
+albedo_texture_force_srgb = true
+heightmap_enabled = true
+heightmap_scale = 16.0
+heightmap_flip_texture = true
+uv1_scale = Vector3(2, 2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qjkr3"]
+material = SubResource("StandardMaterial3D_asiav")
+size = Vector3(2, 2, 2)
+subdivide_width = 2
+subdivide_height = 2
+subdivide_depth = 2
+
+[sub_resource type="MeshLibrary" id="MeshLibrary_6tnvp"]
+item/0/name = "floor"
+item/0/mesh = SubResource("PlaneMesh_2n48x")
+item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/shapes = []
+item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/navigation_layers = 1
+item/1/name = "wall"
+item/1/mesh = SubResource("BoxMesh_qjkr3")
+item/1/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/1/shapes = []
+item/1/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/1/navigation_layers = 1
+
+[node name="Dungeon" type="Node3D"]
+script = ExtResource("1_25qpe")
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = SubResource("MeshLibrary_6tnvp")
+data = {
+"cells": PackedInt32Array(65534, 0, 0, 65534, 3, 0, 65534, 2, 0, 65534, 1, 0, 0, 0, 0, 65535, 3, 0, 65535, 0, 0, 0, 3, 0, 1, 2, 0, 0, 2, 0, 65535, 2, 0, 65535, 1, 0, 0, 1, 0, 1, 3, 0, 1, 1, 0, 1, 0, 0)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="Debuggrid" parent="." instance=ExtResource("2_4hiai")]
+color = Color(1, 0.101961, 0, 1)
