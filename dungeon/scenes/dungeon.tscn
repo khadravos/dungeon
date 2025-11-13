@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://cuptdqrmxph1d"]
 
-[ext_resource type="Script" path="res://scenes/dungeon.gd" id="1_25qpe"]
+[ext_resource type="Script" path="res://scripts/dungeon.gd" id="1_25qpe"]
 [ext_resource type="PackedScene" uid="uid://bjl8gr780i43i" path="res://scenes/debuggrid.tscn" id="2_4hiai"]
 [ext_resource type="Texture2D" uid="uid://cbmssdr7hejib" path="res://sprites/New Piskel.png" id="2_iq7sp"]
 

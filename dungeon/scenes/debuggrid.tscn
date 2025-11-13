@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bjl8gr780i43i"]
 
-[ext_resource type="Script" path="res://scenes/debuggrid.gd" id="1_gn8m8"]
+[ext_resource type="Script" path="res://scripts/debuggrid.gd" id="1_gn8m8"]
 
 [node name="Debuggrid" type="Node3D"]
 script = ExtResource("1_gn8m8")
