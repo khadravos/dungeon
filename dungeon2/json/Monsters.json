@@ -1,0 +1,60 @@
+{
+	"monsters": {
+		"Goblin": {
+			"max_hp": 50,
+			"strength": 10,
+			"defense": 4,
+			"magic": 0,
+			"will": 2,
+			"dexterity": 10,
+			"agility": 1.0,
+			"luck": 0.05,
+			"weak": ["fire"],
+			"resist": ["physical"],
+			"icon": "res://icon.svg"
+		},
+		"Slime": {
+			"max_hp": 40,
+			"strength": 6,
+			"defense": 2,
+			"magic": 4,
+			"will": 4,
+			"dexterity": 6,
+			"agility": 0.8,
+			"luck": 0.0,
+			"weak": ["physical"],
+			"resist": ["fire", "magic"],
+			"icon": "res://icon.svg"
+		}
+	},
+
+	"groups": {
+		"GoblinAmbush": {
+			"floor": 1,
+			"base_level": 1,
+			"exp_reward": 45,
+			"members": ["Goblin", "Goblin", "Goblin"]
+		},
+
+		"ForestSlimes": {
+			"floor": 1,
+			"base_level": 1,
+			"exp_reward": 30,
+			"members": ["Slime", "Slime"]
+		},
+
+		"MixedPack": {
+			"floor": 2,
+			"base_level": 2,
+			"exp_reward": 60,
+			"members": ["Goblin", "Slime", "Slime"]
+		},
+
+		"EliteGoblinRaid": {
+			"floor": 3,
+			"base_level": 3,
+			"exp_reward": 110,
+			"members": ["Goblin", "Goblin", "Slime", "Goblin"]
+		}
+	}
+}

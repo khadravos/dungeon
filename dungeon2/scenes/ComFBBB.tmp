@@ -1,0 +1,129 @@
+[gd_scene load_steps=7 format=3 uid="uid://doxa28qa2g1k3"]
+
+[ext_resource type="Script" path="res://scripts/combat/combatmanager.gd" id="1_3rxoa"]
+[ext_resource type="Script" path="res://scripts/combat/CombatUI.gd" id="2_4y0qf"]
+[ext_resource type="Script" path="res://scripts/combat/EncounterManager.gd" id="3_wn0sm"]
+[ext_resource type="Script" path="res://scripts/combat/TurnManager.gd" id="4_rwoln"]
+[ext_resource type="Script" path="res://scripts/combat/SkillManager.gd" id="5_nvapd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0hrdv"]
+
+[node name="CombatManager" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_3rxoa")
+
+[node name="CombatUI" type="Control" parent="."]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_4y0qf")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="CombatUI"]
+process_mode = 3
+layer = 5
+
+[node name="Control" type="Control" parent="CombatUI/CanvasLayer"]
+process_mode = 3
+layout_direction = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CombatUI/CanvasLayer/Control"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -44.0
+offset_top = 504.0
+offset_right = 256.0
+offset_bottom = 640.0
+grow_horizontal = 2
+tooltip_text = "
+"
+
+[node name="actionscroll" type="ScrollContainer" parent="CombatUI/CanvasLayer/Control/VBoxContainer"]
+modulate = Color(1, 0.996078, 1, 1)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_0hrdv")
+
+[node name="actionlog" type="VBoxContainer" parent="CombatUI/CanvasLayer/Control/VBoxContainer/actionscroll"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Menu" type="VBoxContainer" parent="CombatUI/CanvasLayer/Control"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -253.0
+offset_top = -143.0
+offset_right = -53.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="attackbutton" type="Button" parent="CombatUI/CanvasLayer/Control/Menu"]
+process_mode = 3
+layout_direction = 1
+layout_mode = 2
+size_flags_vertical = 3
+action_mode = 0
+text = "attack"
+autowrap_mode = 2
+
+[node name="defendbutton" type="Button" parent="CombatUI/CanvasLayer/Control/Menu"]
+process_mode = 3
+layout_mode = 2
+action_mode = 0
+text = "defend"
+
+[node name="skillsbutton" type="Button" parent="CombatUI/CanvasLayer/Control/Menu"]
+layout_mode = 2
+text = "skills"
+
+[node name="runbutton" type="Button" parent="CombatUI/CanvasLayer/Control/Menu"]
+process_mode = 3
+layout_mode = 2
+action_mode = 0
+text = "run"
+
+[node name="TurnBars" type="VBoxContainer" parent="CombatUI/CanvasLayer/Control"]
+layout_mode = 2
+offset_right = 200.0
+offset_bottom = 4.0
+
+[node name="PlayerBars" type="Control" parent="CombatUI/CanvasLayer/Control/TurnBars"]
+layout_mode = 2
+
+[node name="EnemyBars" type="Control" parent="CombatUI/CanvasLayer/Control/TurnBars"]
+layout_mode = 2
+
+[node name="SkillsMenu" type="VBoxContainer" parent="CombatUI/CanvasLayer/Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="EncounterManager" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("3_wn0sm")
+
+[node name="TurnManager" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("4_rwoln")
+
+[node name="SkillManager" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("5_nvapd")

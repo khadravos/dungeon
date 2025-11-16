@@ -1,0 +1,69 @@
+{
+	"Fireball": {
+		"damage": 20,
+		"type": "fire",
+		"effect": "single",
+		"stat": "magic",
+		"description": "A fiery blast that burns a single enemy.",
+		"allowed_users": ["Mage", "Elena"]
+	},
+	"Fireblast": {
+		"damage": 20,
+		"type": "fire",
+		"effect": "area",
+		"stat": "magic",
+		"description": "A fiery blast that burns a single enemy.",
+		"allowed_users": ["Mage", "Elena"]
+	},
+	"Heal": {
+		"damage": -15,
+		"type": "heal",
+		"effect": "party,single",
+		"stat": "will",
+		"description": "Restores HP to a single ally.",
+		"allowed_users": ["Cleric", "Hero"]
+	},
+	"Holy-Arrow": {
+	  "damage": 15,
+	  "type": "holy",
+	  "effect": "single,multi-hit",
+	  "hits": 3,
+	  "stat": "will",
+	  "description": "deals holy damage",
+	  "allowed_users": ["Cleric", "Hero"]
+	},
+	"mega-Heal": {
+		"damage": -15,
+		"type": "heal",
+		"effect": "party,area",
+		"stat": "will",
+		"description": "Restores HP to a single ally.",
+		"allowed_users": ["Cleric", "Hero"]
+	},
+	"Slash": {
+		"damage": 10,
+		"type": "physical",
+		"stat": "strength",
+		"effect": "single",
+		"description": "A strong melee attack.",
+		"allowed_users": ["Warrior", "Rogue"]
+	},
+	"frenzy": {
+		"damage": 10,
+		"type": "physical",
+		"stat": "strength",
+		"effect": "random,multi-hit",
+		"hits": 3,
+		"description": "A strong melee attack.",
+		"allowed_users": ["Warrior", "Rogue"]
+	},
+	"arrow storm": {
+		"damage": 10,
+		"type": "physical",
+		"stat": "dexterity",
+		"effect": "random,multi-hit",
+		"hits": 16,
+		"description": "A strong melee attack.",
+		"allowed_users": ["Archer", ""]
+	}
+}

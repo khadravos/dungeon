@@ -1,0 +1,45 @@
+[gd_scene load_steps=8 format=3 uid="uid://onbpdf7fnycq"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_bltkm"]
+[ext_resource type="PackedScene" uid="uid://dypicw6vx8j11" path="res://scenes/player.tscn" id="1_uoldt"]
+[ext_resource type="PackedScene" uid="uid://cuptdqrmxph1d" path="res://scenes/dungeon.tscn" id="2_4w22k"]
+[ext_resource type="PackedScene" uid="uid://doxa28qa2g1k3" path="res://scenes/CombatManager.tscn" id="3_vkmbj"]
+[ext_resource type="Script" path="res://scenes/persistentplayerbars.gd" id="5_fxp2c"]
+[ext_resource type="PackedScene" uid="uid://b38ygkf2ltqdx" path="res://scenes/playerbars.tscn" id="5_g6yeh"]
+
+[sub_resource type="Environment" id="Environment_g4qwo"]
+ambient_light_color = Color(0.846245, 0.831991, 0, 1)
+ambient_light_energy = 0.67
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_bltkm")
+
+[node name="Dungeon" parent="." instance=ExtResource("2_4w22k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.916929, 0.124569, -1.05616)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.64679, -0.761552, 0.0412442, 0, 0.0540788, 0.998537, -0.762668, -0.645843, 0.0349776, -1.58738, 4.31102, 0.626511)
+light_energy = 1.808
+light_indirect_energy = 0.0
+light_angular_distance = 27.27
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_g4qwo")
+
+[node name="CombatManager" parent="." instance=ExtResource("3_vkmbj")]
+script = null
+
+[node name="Player" parent="." instance=ExtResource("1_uoldt")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.01831, 0.957205, 0.0263069)
+
+[node name="persistentplayerbars" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("5_fxp2c")
+
+[node name="Playerbars" parent="persistentplayerbars" instance=ExtResource("5_g6yeh")]
+layout_mode = 1
+
+[connection signal="encounter_triggered" from="Player" to="." method="_on_player_encounter_triggered"]

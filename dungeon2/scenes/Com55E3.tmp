@@ -1,0 +1,95 @@
+[gd_scene load_steps=2 format=3 uid="uid://doxa28qa2g1k3"]
+
+[ext_resource type="Script" path="res://scripts/combatmanager.gd" id="1_3rxoa"]
+
+[node name="Combatmanager" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_3rxoa")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+process_mode = 3
+layout_direction = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -119.0
+offset_top = 10.0
+offset_right = 81.0
+offset_bottom = 310.0
+grow_horizontal = 2
+tooltip_text = "
+"
+
+[node name="ActionLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Menu" type="VBoxContainer" parent="CanvasLayer/Control"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -95.0
+offset_top = -127.0
+offset_right = 105.0
+offset_bottom = -26.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="attackbutton" type="Button" parent="CanvasLayer/Control/Menu"]
+process_mode = 3
+layout_direction = 1
+layout_mode = 2
+size_flags_vertical = 3
+action_mode = 0
+text = "attack"
+autowrap_mode = 2
+
+[node name="defendbutton" type="Button" parent="CanvasLayer/Control/Menu"]
+process_mode = 3
+layout_mode = 2
+action_mode = 0
+text = "defend"
+
+[node name="skillsbutton" type="Button" parent="CanvasLayer/Control/Menu"]
+layout_mode = 2
+text = "skills"
+
+[node name="runbutton" type="Button" parent="CanvasLayer/Control/Menu"]
+process_mode = 3
+layout_mode = 2
+action_mode = 0
+text = "run"
+
+[node name="TurnBars" type="VBoxContainer" parent="CanvasLayer/Control"]
+layout_mode = 2
+offset_right = 200.0
+offset_bottom = 4.0
+
+[node name="PlayerBars" type="Control" parent="CanvasLayer/Control/TurnBars"]
+layout_mode = 2
+
+[node name="EnemyBars" type="Control" parent="CanvasLayer/Control/TurnBars"]
+layout_mode = 2
+
+[node name="SkillsMenu" type="VBoxContainer" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
