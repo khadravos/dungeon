@@ -90,12 +90,21 @@ func _process(delta):
 func _on_turn_ready(battler: Battler):
 	active_battler = battler
 	
+	battler.process_status_effects()
+	if battler.has_status("stun"):
+	# Skip turn
+		ui_manager.show_message("%s is stunned!" % battler.name)
+		await get_tree().create_timer(1.0).timeout
+		_end_turn()
+		return
 	if battler.is_player:
 		ui_manager.populate_skills_menu(skill_manager, battler)
 		ui_manager.show_player_menu(battler)
+		ui_manager.set_buttons_enabled(true)
 	else:
 		await get_tree().create_timer(1.0).timeout
 		_enemy_action(battler)
+	
 
 
 # === Player Actions ===
@@ -117,7 +126,7 @@ func _on_defend_selected():
 	ui_manager.show_message("%s is defending!" % active_battler.name)
 	await get_tree().create_timer(1.0).timeout
 	_end_turn()
-	ui_manager.set_buttons_enabled(true)
+	
 
 func _on_run_selected():
 	ui_manager.set_buttons_enabled(false)
@@ -131,37 +140,44 @@ func _on_run_selected():
 		ui_manager.show_message("Couldn't escape!")
 		await get_tree().create_timer(1.0).timeout
 		_end_turn()
-		ui_manager.set_buttons_enabled(true)
 
 func _on_skill_selected(skill_name: String):
 	if not active_battler or not active_battler.is_player:
 		return
-	
-	pending_skill = skill_name
-	pending_attack = false
-	player_state = PlayerState.CHOOSING_TARGET_FOR_SKILL
 
 	var skill = skill_manager.get_skill(skill_name)
-	var effects = (skill.get("effect", "single") if skill else "single").split(",")
+	if skill == null:
+		ui_manager.show_message("Skill not found.")
+		return
 
-	var targets_to_select = []
+	pending_skill = skill_name
+	pending_attack = false
 
-	# === Determine selectable targets ===
-	if "party" in effects:
-		targets_to_select = party  # allies
-	elif "single" in effects:
-		targets_to_select = enemies  # enemies
-	# random/area skills do not need selection
-	else:
-		targets_to_select = []
+	var effects: Array = skill.get("effect", "single").split(",")
 
-	if targets_to_select.size() > 0:
-		ui_manager.enable_target_selection(targets_to_select, true)
-		ui_manager.show_message("Choose a target for %s." % skill_name)
-	else:
-		# No selection needed
-		_execute_skill(skill_name)
+	# AUTO EXECUTE SKILLS WITHOUT TARGET SELECTION
+	if "area" in effects or "party" in effects or "random" in effects:
 		player_state = PlayerState.NONE
+		_execute_skill(skill_name, null)
+		return
+
+	# SINGLE TARGET LOGIC
+	var targets: Array = []
+
+	if "single" in effects:
+		if skill.get("damage", 0) > 0:
+			targets = enemies
+		else:
+			targets = party
+
+	if targets.is_empty():
+		player_state = PlayerState.NONE
+		_execute_skill(skill_name, null)
+		return
+
+	player_state = PlayerState.CHOOSING_TARGET_FOR_SKILL
+	ui_manager.enable_target_selection(targets, true)
+	ui_manager.show_message("Choose a target for %s." % skill_name)
 
 
 func _on_target_selected(target: Battler):
@@ -174,7 +190,7 @@ func _on_target_selected(target: Battler):
 		PlayerState.CHOOSING_TARGET_FOR_ATTACK:
 			_execute_attack()
 		PlayerState.CHOOSING_TARGET_FOR_SKILL:
-			_execute_skill(pending_skill)
+			_execute_skill(pending_skill, selected_target)
 		_:
 			ui_manager.show_message("Choose an action first.")
 
@@ -217,77 +233,143 @@ func _execute_attack():
 		[active_battler.name, selected_target.name, dmg])
 	_cleanup_after_action()
 
-
-func _execute_skill(skill_name: String):
+func _execute_skill(skill_name: String, selected_target: Battler):
 	var skill = skill_manager.get_skill(skill_name)
-	if not skill:
+	if skill == null:
+		print("[ERROR] Skill '%s' not found!" % skill_name)
 		ui_manager.show_message("Skill not found.")
+		_cleanup_after_action()
 		return
 
-	var effect_string: String = skill.get("effect", "single")
-	var effects: Array = effect_string.split(",")  # ["single", "multi-hit", "party", "area", "random", etc.]
-	var hits: int = skill.get("hits", 1)
+	print("\n=== EXECUTING SKILL: %s ===" % skill_name)
 
-	# === Determine targets ===
+	# Effects & skill properties
+	var effects: Array = skill.get("effect", "single").split(",")
+	var hits: int = skill.get("hits", 1)
+	var power: int = skill.get("damage", 0)  # Damage value
+	var heal: int = skill.get("heal", 0)
+	var crit_chance: float = skill.get("crit_chance", 0.0)
+	var crit_mult: float = skill.get("on_crit", 2.0)
+	var stat: String = skill.get("stat", "")
+	var status_name: String = skill.get("status_name", "")
+
+	print("Effects: ", effects)
+	print("Hits: ", hits)
+	print("Power/Damage: ", power)
+	print("Heal: ", heal)
+
+	# 1) DETERMINE TARGETS
 	var targets: Array = []
 
 	if "single" in effects:
+		if selected_target == null:
+			print("[ERROR] No selected target for single-target skill!")
+			ui_manager.show_message("No target selected.")
+			_cleanup_after_action()
+			return
 		targets = [selected_target]
-	if "party" in effects:
-		if "area" in effects:
-			targets = party  # heal all allies
-		else:
-			targets = [selected_target]  # heal single ally  # heal single ally
+		print("Single-target skill → Target: %s" % selected_target.name)
+
+	elif "party" in effects:
+		targets = party if active_battler.is_player else enemies
+		print("Party skill → %d targets" % targets.size())
+
 	elif "area" in effects:
-		targets = enemies  # area damage hits all enemies
+		targets = enemies if active_battler.is_player else party
+		print("Area skill → %d targets" % targets.size())
+
 	elif "random" in effects:
-		targets = enemies  # will pick randomly later
+		var pool = enemies if active_battler.is_player else party
+		if pool.is_empty():
+			print("[ERROR] No enemies/allies to randomly target!")
+			ui_manager.show_message("No valid targets.")
+			_cleanup_after_action()
+			return
+		targets = [pool[randi() % pool.size()]]
+		print("Random skill → Target: %s" % targets[0].name)
 
-	# === Execute skill ===
-	if "random" in effects and "multi-hit" in effects:
-		# Random multi-hit
-		for i in range(hits):
-			var target = enemies.pick_random()
-			if target.hp <= 0:
-				continue
-			var dmg = skill_manager.compute_skill_damage(skill_name, active_battler, target)
-			target.hp -= dmg
-			ui_manager.show_message("%s hits %s for %d with %s!" %
-				[active_battler.name, target.name, dmg, skill_name])
-	elif "multi-hit" in effects:
-		# Multi-hit on single target or area target list
+	# 2) FILTER NULL + DEAD TARGETS
+	targets = targets.filter(func(t):
+		return t != null and t.hp > 0
+	)
+
+	print("Valid targets after filtering: %d" % targets.size())
+
+	if targets.is_empty():
+		print("[WARN] No valid targets after filtering.")
+		ui_manager.show_message("No valid targets.")
+		_cleanup_after_action()
+		return
+
+	# 3) APPLY DAMAGE / HEALING / EFFECTS
+	for hit_i in range(hits):
+		print("--- HIT %d/%d ---" % [hit_i + 1, hits])
+
 		for t in targets:
-			var total_dmg = 0
-			for i in range(hits):
-				var dmg = skill_manager.compute_skill_damage(skill_name, active_battler, t)
-				total_dmg += dmg
-			t.hp -= total_dmg
-			ui_manager.show_message("%s hits %s %d times with %s for %d total!" %
-				[active_battler.name, t.name, hits, skill_name, total_dmg])
-	else:
-		# Single hit or area
-		for t in targets:
-			if t.hp <= 0:
-				continue
-			var dmg = skill_manager.compute_skill_damage(skill_name, active_battler, t)
+			print(" → Applying skill to %s" % t.name)
 
-			if "party" in effects:
-				# Healing skill
-				t.hp += abs(skill.get("damage", 0))
-				ui_manager.show_message("%s uses %s to heal %s for %d!" %
-					[active_battler.name, skill_name, t.name, abs(skill.get("damage", 0))])
-			else:
-				# Regular damage
-				t.hp -= dmg
-				if "area" in effects:
-					ui_manager.show_message("%s uses %s on all enemies!" %
-						[active_battler.name, skill_name])
-				else:
-					ui_manager.show_message("%s uses %s on %s for %d!" %
-						[active_battler.name, skill_name, t.name, dmg])
+			# --- DAMAGE ---
+			if power > 0:
+				var dmg: int = power
+				if randf() < crit_chance:
+					dmg = int(dmg * crit_mult)
+					print("   Critical hit! Damage: %d" % dmg)
+					ui_manager.show_message("%s suffered a CRITICAL hit!" % t.name)
+				t.hp = max(0, t.hp - dmg)
+				print("   Damage: -%d (HP now %d)" % [dmg, t.hp])
+				ui_manager.show_message("%s took %d damage!" % [t.name, dmg])
 
+			# --- HEAL ---
+			if heal > 0:
+				t.hp = min(t.max_hp, t.hp + heal)
+				print("   Heal: +%d (HP now %d)" % [heal, t.hp])
+				ui_manager.show_message("%s recovered %d HP!" % [t.name, heal])
+
+			# --- STATUS EFFECTS ---
+			if status_name != "":
+				print("   Applying status effect: %s" % status_name)
+				_apply_status_effect(t, status_name)
+
+			# --- BUFF / DEBUFF ---
+			if "buff" in effects and stat != "":
+				print("   Buffing %s: %s by %d" % [t.name, stat, power])
+				_apply_buff(t, stat, power)
+
+			if "debuff" in effects and stat != "":
+				print("   Debuffing %s: %s by %d" % [t.name, stat, power])
+				_apply_debuff(t, stat, power)
+
+	# 4) AFTER ACTION
 	_cleanup_after_action()
 
+
+func _apply_status_effect(target: Battler, effect_name: String):
+	if effect_name == "" or effect_name == null:
+		return
+
+	var path = "res://tres/%s.tres" % effect_name
+	var effect_res = load(path)
+
+	if effect_res == null:
+		push_error("StatusEffect NOT FOUND: %s" % path)
+		return
+
+	target.add_status(effect_res)
+	ui_manager.show_message("%s is now affected by %s!" %
+		[target.name, effect_name])
+
+
+func _apply_buff(target: Battler, stat: String, amount: int):
+	if target == null:
+		return
+	target.add_buff(stat, amount)
+	ui_manager.log_action("%s's %s increased by %d!" % [target.name, stat, amount])
+
+func _apply_debuff(target: Battler, stat: String, amount: int):
+	if target == null:
+		return
+	target.add_debuff(stat, amount)
+	ui_manager.log_action("%s's %s decreased by %d!" % [target.name, stat, amount])
 
 func _cleanup_after_action():
 	ui_manager.enable_target_selection([], false)

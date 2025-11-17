@@ -55,7 +55,7 @@
 		"luck": 0.05,
 		"weak": ["dark"],
 		"resist": ["physical", "holy"],
-		"unlocked": true,
+		"unlocked": false,
 		"icon": "res://icon.svg"
 	},
 
@@ -70,7 +70,7 @@
 		"luck": 0.25,
 		"weak": ["fire"],
 		"resist": ["physical"],
-		"unlocked": true,
+		"unlocked": false,
 		"icon": "res://icon.svg"
 	},
 
@@ -85,7 +85,7 @@
 		"luck": 0.1,
 		"weak": ["poison"],
 		"resist": ["holy"],
-		"unlocked": true,
+		"unlocked": false,
 		"icon": "res://icon.svg"
 	}
 }

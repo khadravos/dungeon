@@ -32,3 +32,4 @@ func process_turns(delta):
 
 func resume():
 	paused = false
+	

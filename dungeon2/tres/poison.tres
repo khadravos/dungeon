@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffect" load_steps=2 format=3 uid="uid://c474bvcr3s3ni"]
+
+[ext_resource type="Script" path="res://scripts/combat/StatusEffect.gd" id="1_admbo"]
+
+[resource]
+script = ExtResource("1_admbo")
+name = ""
+duration = 3
+amount = 0.0
+effect_type = ""

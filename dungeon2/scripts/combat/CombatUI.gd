@@ -13,7 +13,7 @@ signal target_selected(target: Battler)
 @onready var action_scroll: ScrollContainer = $CanvasLayer/Control/VBoxContainer/actionscroll
 
 @onready var menu_container: VBoxContainer = $CanvasLayer/Control/Menu
-@onready var skills_menu: VBoxContainer = $CanvasLayer/Control/SkillsMenu
+@onready var skills_menu: VBoxContainer = $"CanvasLayer/Control/skills container/SkillsMenu"
 @onready var enemy_bars_container: HBoxContainer = $CanvasLayer/Control/TurnBars/EnemyBars
 
 @onready var attack_button: Button = menu_container.get_node("attackbutton")
@@ -146,6 +146,7 @@ func show_skills_menu():
 	menu_container.visible = false
 	skills_menu.visible = true
 	show_message("Select a skill to use!")
+	
 
 func populate_skills_menu(skill_manager: SkillManager, battler: Battler):
 	skills_menu.visible = true
@@ -159,7 +160,8 @@ func populate_skills_menu(skill_manager: SkillManager, battler: Battler):
 			continue
 
 		var btn = Button.new()
-		btn.custom_minimum_size = Vector2(140, 32)
+		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		btn.custom_minimum_size = Vector2(0, 32)  # height only; width fills automatically	
 
 		var effect = skill.get("effect", "")
 		var hits = skill.get("hits", 1)
