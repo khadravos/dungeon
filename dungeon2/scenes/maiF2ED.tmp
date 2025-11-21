@@ -17,7 +17,7 @@ ambient_light_energy = 0.67
 script = ExtResource("1_bltkm")
 
 [node name="Dungeon" parent="." instance=ExtResource("2_4w22k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.125, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.916929, 0.124569, -1.05616)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.64679, -0.761552, 0.0412442, 0, 0.0540788, 0.998537, -0.762668, -0.645843, 0.0349776, -1.58738, 4.31102, 0.626511)
@@ -31,7 +31,7 @@ environment = SubResource("Environment_g4qwo")
 [node name="CombatManager" parent="." groups=["combat_manager"] instance=ExtResource("3_vkmbj")]
 
 [node name="Player" parent="." instance=ExtResource("1_uoldt")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.740806, 0.957205, 0.0263069)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.01831, 0.957205, 0.0263069)
 
 [node name="persistentplayerbars" type="Control" parent="."]
 process_mode = 3

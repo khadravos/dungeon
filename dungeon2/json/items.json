@@ -1,0 +1,43 @@
+{
+	"SwordBasic": {
+		"name": "Basic Sword",
+		"type": "weapon",
+		"slot": "right_hand",
+		"allowed_users": ["Hero"],
+		"stat_bonus": {
+			"strength": 1000
+		}
+	},
+
+	"WoodenShield": {
+		"name": "Wooden Shield",
+		"type": "shield",
+		"slot": "left_hand",
+		"allowed_users": ["Hero"],
+		"stat_bonus": {
+			"defense": 5
+		}
+	},
+
+	"LeatherArmor": {
+		"name": "Leather Armor",
+		"type": "armor",
+		"slot": "armor",
+		"allowed_users": ["Hero", "Rogue"],
+		"stat_bonus": {
+			"defense": 8,
+			"max_hp": 20
+		}
+	},
+
+	"SilverRing": {
+		"name": "Silver Ring",
+		"type": "accessory",
+		"slot": "accessory1",
+		"allowed_users": ["Rogue"],
+		"stat_bonus": {
+			"dexterity": 2,
+			"luck": 0.05
+		}
+	}
+}

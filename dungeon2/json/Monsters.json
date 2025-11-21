@@ -2,7 +2,7 @@
 	"monsters": {
 		"Goblin": {
 			"max_hp": 50,
-			"strength": 10,
+			"strength": 20,
 			"defense": 4,
 			"magic": 0,
 			"will": 2,
@@ -11,11 +11,16 @@
 			"luck": 0.05,
 			"weak": ["fire"],
 			"resist": ["physical"],
-			"icon": "res://icon.svg"
+			"icon": "res://icon.svg",
+			"drops": [
+		{ "item": "SlimeGel", "chance": 0.60, "amount": 1 },
+		{ "item": "SmallPotion", "chance": 0.25, "amount": 1 },
+		{ "item": "IronShard", "chance": 0.05, "amount": 1 }
+	]
 		},
 		"Slime": {
 			"max_hp": 40,
-			"strength": 6,
+			"strength": 25,
 			"defense": 2,
 			"magic": 4,
 			"will": 4,
@@ -24,8 +29,12 @@
 			"luck": 0.0,
 			"weak": ["physical"],
 			"resist": ["fire", "magic"],
-			"icon": "res://icon.svg"
-		}
+			"icon": "res://icon.svg",
+			"drops": [
+		{ "item": "tatteredcloth", "chance": 0.60, "amount": 1 },
+		{ "item": "SmallPotion", "chance": 0.25, "amount": 1 },
+		{ "item": "IronShard", "chance": 0.05, "amount": 1 }
+		]}
 	},
 
 	"groups": {

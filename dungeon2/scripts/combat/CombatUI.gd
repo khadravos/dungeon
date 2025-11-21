@@ -110,7 +110,7 @@ func _create_enemy_bars(enemies: Array):
 		# store references
 		e.hp_bar = hp_bar
 		e.button = icon   # replaced button with icon for targeting
-
+		print("UI enemy:", e.name, "ID=", e.get_instance_id())
 # =========================================
 # TARGET SELECTION
 # =========================================
@@ -140,7 +140,11 @@ func show_player_menu(battler: Battler):
 	skills_menu.visible = false
 	action_log.visible = true
 	action_scroll.visible = true
+	
 	show_message("%s's turn! Choose an action." % battler.name)
+
+func show_enemies():
+	enemy_bars_container.visible = true
 
 func show_skills_menu():
 	menu_container.visible = false
@@ -196,6 +200,7 @@ func _add_log_line(text: String):
 # =========================================
 func hide_all_menus():
 	menu_container.visible = false
+	enemy_bars_container.visible = false
 	skills_menu.visible = false
 	action_log.visible = false
 	action_scroll.visible = false
@@ -212,8 +217,19 @@ func update_target_availability():
 			if child is Button:
 				var battler = child.get_meta("battler")
 				child.disabled = battler.hp <= 0 or (target_selection_enabled and not battler in current_target_group)
+
 func set_buttons_enabled(enabled: bool):
 	attack_button.disabled = not enabled
 	defend_button.disabled = not enabled
 	run_button.disabled = not enabled
 	skills_button.disabled = not enabled
+	
+func clear_targets():
+	current_target_group = []
+	
+	# Desliga seleção nos inimigos (visual)
+	for container in enemy_bars_container.get_children():
+		for child in container.get_children():
+			if child is TextureRect:
+				# remove highlight se você tiver um
+				child.modulate = Color.WHITE

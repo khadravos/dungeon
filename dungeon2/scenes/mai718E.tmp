@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://onbpdf7fnycq"]
+[gd_scene load_steps=8 format=3 uid="uid://onbpdf7fnycq"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_bltkm"]
 [ext_resource type="PackedScene" uid="uid://dypicw6vx8j11" path="res://scenes/player.tscn" id="1_uoldt"]
@@ -6,8 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://doxa28qa2g1k3" path="res://scenes/CombatManager.tscn" id="3_vkmbj"]
 [ext_resource type="Script" path="res://scripts/persistentplayerbars.gd" id="5_fxp2c"]
 [ext_resource type="PackedScene" uid="uid://b38ygkf2ltqdx" path="res://scenes/playerbars.tscn" id="5_g6yeh"]
-[ext_resource type="Script" path="res://scripts/InventoryManager.gd" id="7_lfiep"]
-[ext_resource type="PackedScene" uid="uid://rtlj6tgg4x7" path="res://scenes/EquipmentPanel.tscn" id="7_ln4ui"]
 
 [sub_resource type="Environment" id="Environment_g4qwo"]
 ambient_light_color = Color(0.846245, 0.831991, 0, 1)
@@ -17,7 +15,7 @@ ambient_light_energy = 0.67
 script = ExtResource("1_bltkm")
 
 [node name="Dungeon" parent="." instance=ExtResource("2_4w22k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.125, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.916929, 0.124569, -1.05616)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.64679, -0.761552, 0.0412442, 0, 0.0540788, 0.998537, -0.762668, -0.645843, 0.0349776, -1.58738, 4.31102, 0.626511)
@@ -31,7 +29,7 @@ environment = SubResource("Environment_g4qwo")
 [node name="CombatManager" parent="." groups=["combat_manager"] instance=ExtResource("3_vkmbj")]
 
 [node name="Player" parent="." instance=ExtResource("1_uoldt")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.740806, 0.957205, 0.0263069)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.01831, 0.957205, 0.0263069)
 
 [node name="persistentplayerbars" type="Control" parent="."]
 process_mode = 3
@@ -57,15 +55,5 @@ mouse_filter = 2
 [node name="Playerbars" parent="persistentplayerbars/BarsContainer" instance=ExtResource("5_g6yeh")]
 z_index = 4
 layout_mode = 2
-
-[node name="EquipmentPanel" parent="." instance=ExtResource("7_ln4ui")]
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -200.0
-grow_horizontal = 0
-
-[node name="inventoryManager" type="Node" parent="."]
-script = ExtResource("7_lfiep")
 
 [connection signal="encounter_triggered" from="Player" to="." method="_on_player_encounter_triggered"]

@@ -28,7 +28,7 @@
 	},
 
 	"Heal": {
-		"damage": -15,
+		"heal": 15,
 		"type": "heal",
 		"effect": "party,single",
 		"stat": "will",
@@ -67,7 +67,7 @@
 	},
 
 	"mega-Heal": {
-		"damage": -15,
+		"heal": 15,
 		"type": "heal",
 		"effect": "party,area",
 		"stat": "will",
